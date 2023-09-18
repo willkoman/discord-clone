@@ -5,6 +5,7 @@ import { MemberRole } from '@prisma/client';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { ChevronDown, LogOut, PlusCircle, Settings, Trash2, UserPlus, Users } from "lucide-react";
 import { useModal } from "@/hooks/use-modal-store";
+import { on } from 'events';
 
 interface ServerHeaderProps{
     server:ServerWithMembersWithProfiles;
@@ -47,7 +48,7 @@ export const ServerHeader = ({
                     </DropdownMenuItem>
                 )}
                 {isAdmin && (
-                    <DropdownMenuItem 
+                    <DropdownMenuItem
                     className = "px-3 py-2 text-sm cursor-pointer"
                     onClick={()=>onOpen("members",{server})}>
                         Manage Members
@@ -55,7 +56,8 @@ export const ServerHeader = ({
                     </DropdownMenuItem>
                 )}
                 {isModerator && (
-                    <DropdownMenuItem className = "px-3 py-2 text-sm cursor-pointer">
+                    <DropdownMenuItem className = "px-3 py-2 text-sm cursor-pointer"
+                    onClick={()=>onOpen("createChannel",{server})}>
                         Create Channel
                         <PlusCircle className = "h-4 w-4 ml-auto"/>
                     </DropdownMenuItem>
@@ -64,13 +66,17 @@ export const ServerHeader = ({
                     <DropdownMenuSeparator/>
                 )}
                 {isAdmin && (
-                    <DropdownMenuItem className = "text-rose-500 px-3 py-2 text-sm cursor-pointer">
+                    <DropdownMenuItem 
+                    onClick={()=>onOpen("deleteServer",{server})}
+                    className = "text-rose-500 px-3 py-2 text-sm cursor-pointer">
                         Delete Server
                         <Trash2 className = "h-4 w-4 ml-auto"/>
                     </DropdownMenuItem>
                 )}
                 {!isAdmin && (
-                    <DropdownMenuItem className = "text-rose-500 px-3 py-2 text-sm cursor-pointer">
+                    <DropdownMenuItem
+                    onClick={()=>onOpen("leaveServer",{server})}
+                    className = "text-rose-500 px-3 py-2 text-sm cursor-pointer">
                         Leave Server
                         <LogOut className = "h-4 w-4 ml-auto"/>
                     </DropdownMenuItem>
