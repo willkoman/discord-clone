@@ -85,7 +85,7 @@ export const CreateChannelModal = () => {
     return (
         
         <Dialog open={isModalOpen} onOpenChange={handleClose}>
-            <DialogContent className="bg-white text-black p-0 overflow-hidden">
+            <DialogContent className="bg-white dark:bg-zinc-800 text-black dark:text-white p-0 overflow-hidden">
                 <DialogHeader className="pt-8 px-6">
                     <DialogTitle className="text-2xl text-center font-bold">
                         Customize your channel
@@ -103,12 +103,12 @@ export const CreateChannelModal = () => {
 
 
                                     <FormItem>
-                                        <FormLabel className = "uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70">
+                                        <FormLabel className = "uppercase text-xs font-bold text-zinc-500 dark:text-white">
                                             Channel Name
                                         </FormLabel>
                                         <FormControl>
                                             <Input disabled={isLoading}
-                                            className="bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0" placeholder="Enter channel name" 
+                                            className="bg-zinc-300/50 dark:bg-zinc-200 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0" placeholder="Enter channel name" 
                                             {...field}
                                             onChange={(e) => {
                                                 e.target.value = e.target.value.toLowerCase().replace(/\s+/g, '-').replace(/[!-\/:-@\[-`{-~]/g, '-'); ;
@@ -124,12 +124,12 @@ export const CreateChannelModal = () => {
                                 name="description"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel className = "uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70">
+                                        <FormLabel className = "uppercase text-xs font-bold text-zinc-500 dark:text-white">
                                             Channel Description
                                         </FormLabel>
                                         <FormControl>
                                             <Input disabled={isLoading}
-                                            className="bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0" placeholder="Enter channel description" {...field} />
+                                            className="bg-zinc-300/50 dark:bg-zinc-200 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0" placeholder="Enter channel description" {...field} />
                                         </FormControl>
                                         <FormMessage>{form.formState.errors.description?.message}</FormMessage>
                                     </FormItem>
@@ -140,7 +140,8 @@ export const CreateChannelModal = () => {
                                 name="type"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>
+                                        <FormLabel className = "uppercase text-xs font-bold text-zinc-500 dark:text-white"
+                                        >
                                             Channel Type
                                         </FormLabel>
                                         <Select
@@ -150,7 +151,7 @@ export const CreateChannelModal = () => {
                                         >
                                             <FormControl>
                                                 <SelectTrigger
-                                                className = "bg-zinc-300/50 border-0 focus:ring-0 text-black ring-offset-0 focus:ring-offset-0 capitalize outline-none">
+                                                className="capitalize bg-zinc-300/50 dark:bg-zinc-200 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0" >
                                                     <SelectValue 
                                                     placeholder = "Select a channel type" 
                                                     className="capitalize"/>
@@ -169,7 +170,7 @@ export const CreateChannelModal = () => {
                                 )}
                             />
                         </div>
-                        <DialogFooter className="bg-gray-100 px-6 py-4">
+                        <DialogFooter className="bg-gray-100 dark:bg-zinc-900  px-6 py-4">
                             <Button disabled={isLoading} className="" variant={"primary"}>
                                 Create Channel
                             </Button>

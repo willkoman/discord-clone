@@ -91,12 +91,12 @@ export const MembersModal = () => {
     }
     return (
         <Dialog open={isModalOpen} onOpenChange={onClose}>
-            <DialogContent className="bg-white text-black overflow-hidden">
+            <DialogContent className="bg-white text-black dark:bg-zinc-900 dark:text-white overflow-hidden">
                 <DialogHeader className="pt-8 px-6">
                     <DialogTitle className="text-2xl text-center font-bold">
                         Manage Members
                     </DialogTitle>
-                    <DialogDescription className="text-center text-zinc-500">
+                    <DialogDescription className="text-center text-zinc-500 dark:text-zinc-300">
                         {server?.members?.length} Members
                     </DialogDescription>
                 </DialogHeader>
@@ -109,7 +109,7 @@ export const MembersModal = () => {
                                     {member.profile.name}
                                     {roleIconMap[member.role]}
                                 </div>
-                                <p className = "text-xs text-zinc-500">
+                                <p className = "text-xs text-zinc-500 dark:text-zinc-300">
                                     {member.profile.email}
                                 </p>
                             </div>
@@ -117,13 +117,13 @@ export const MembersModal = () => {
                                 <div className = "ml-auto">
                                     <DropdownMenu>
                                         <DropdownMenuTrigger>
-                                            <MoreVertical className = "h-4 w-4 text-zinc-500"/>
+                                            <MoreVertical className = "h-4 w-4 text-zinc-500 dark:text-zinc-300"/>
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent side="left">
                                             <DropdownMenuSub>
                                                 <DropdownMenuSubTrigger className = "flex items-center">
                                                     <ShieldQuestion
-                                                        className="h-4 w-4 mr-2 text-zinc-500"
+                                                        className="h-4 w-4 mr-2 text-zinc-500 dark:text-zinc-300"
                                                     />
                                                     <span>Role</span>
                                                 </DropdownMenuSubTrigger>
@@ -158,7 +158,7 @@ export const MembersModal = () => {
                                 </div>
                             )}
                             {loadingId === member.id && (
-                                <Loader className ="animate-spin text-zinc-500 ml-auto w-4 h-4"/>
+                                <Loader className ="animate-spin text-zinc-500 dark:text-zinc-300 ml-auto w-4 h-4"/>
                             )}
                         </div>
                     ))}
