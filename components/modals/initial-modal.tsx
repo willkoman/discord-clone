@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import FileUpload from "@/components/file-upload";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 const formSchema = z.object({
     name: z.string().min(1, {message: "Server name is required"}).max(100,{message:  "Server name must be less than 100 characters"}),
     imageUrl: z.string().min(1, {message: "Server image is required"})
@@ -71,7 +72,8 @@ export const InitialModal = () => {
                                     name="imageUrl"
                                     render = {({ field }) => (
                                         <FormItem>
-                                            <FormControl>
+                                            <FormControl className={cn(
+                                            form.watch("imageUrl") ? "" : "border-none bg-zinc-900 rounded-md")}>
                                                 <FileUpload
                                                     endpoint="serverImage"
                                                     value={field.value}
@@ -91,14 +93,14 @@ export const InitialModal = () => {
                                         <FormLabel className = "uppercase text-xs font-bold text-zinc-500 dark:text-zinc-300">Server Name</FormLabel>
                                         <FormControl>
                                             <Input disabled={isLoading}
-                                            className="bg-zinc-300/50 dark:bg-zinc-200 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0" placeholder="Enter server name" {...field} />
+                                            className="bg-zinc-300/50 dark:bg-zinc-700 dark:text-white border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0" placeholder="Enter server name" {...field} />
                                         </FormControl>
                                         <FormMessage>{form.formState.errors.name?.message}</FormMessage>
                                     </FormItem>
                                 )}
                             />
                         </div>
-                        <DialogFooter className="bg-gray-100 dark:bg-gray-900 px-6 py-4">
+                        <DialogFooter className="bg-gray-100 dark:bg-zinc-900 px-6 py-4">
                             <Button disabled={isLoading} className="" variant={"primary"}>
                                 Create Server
                             </Button>

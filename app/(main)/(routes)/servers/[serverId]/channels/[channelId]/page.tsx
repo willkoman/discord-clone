@@ -3,6 +3,8 @@ import { redirectToSignIn } from "@clerk/nextjs";
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 import { ChatHeader } from "@/components/chat/chat-header";
+import { ChatInput } from "@/components/chat/chat-input";
+import { ChatMessages } from "@/components/chat/chat-messages";
 
 interface ChannelIdPageProps {
     params: {
@@ -17,7 +19,7 @@ const ChannelIdPage = async ({
 
     const profile = await currentProfile();
     if (!profile) return redirectToSignIn();
-    
+
     const channel = await db.channel.findUnique({
         where: {
             id: params.channelId,
@@ -35,13 +37,30 @@ const ChannelIdPage = async ({
 
     return ( 
         <div className= "bg-white dark:bg-[#313338] flex flex-col h-full">
-            <ChatHeader 
+            <ChatHeader
                 name={channel.name}
                 serverId={channel.serverId}
                 type="channel"
             />
+            <ChatMessages 
+                member={member}
+                name={channel.name}
+                chatId={channel.id}
+                type="channel"
+                apiUrl="/api/messages"
+                socketUrl="/api/socket/messages"
+                socketQuery={{serverId: channel.serverId, channelId: channel.id}}
+                paramKey="channelId"
+                paramValue={channel.id}
+            />
+            <ChatInput
+            name = {channel.name}
+            type = "channel"
+            query = {{serverId: channel.serverId, channelId: channel.id}}
+            apiUrl = {`/api/socket/messages`}
+            />
         </div>
      );
 }
- 
+
 export default ChannelIdPage;

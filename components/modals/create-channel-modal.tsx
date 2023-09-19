@@ -100,15 +100,13 @@ export const CreateChannelModal = () => {
                                 name="name"
 
                                 render={({ field }) => (
-
-
                                     <FormItem>
                                         <FormLabel className = "uppercase text-xs font-bold text-zinc-500 dark:text-white">
                                             Channel Name
                                         </FormLabel>
                                         <FormControl>
                                             <Input disabled={isLoading}
-                                            className="bg-zinc-300/50 dark:bg-zinc-200 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0" placeholder="Enter channel name" 
+                                            className="bg-zinc-300/50 dark:bg-zinc-700 dark:text-white border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0" placeholder="Enter channel name" 
                                             {...field}
                                             onChange={(e) => {
                                                 e.target.value = e.target.value.toLowerCase().replace(/\s+/g, '-').replace(/[!-\/:-@\[-`{-~]/g, '-'); ;
@@ -129,7 +127,7 @@ export const CreateChannelModal = () => {
                                         </FormLabel>
                                         <FormControl>
                                             <Input disabled={isLoading}
-                                            className="bg-zinc-300/50 dark:bg-zinc-200 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0" placeholder="Enter channel description" {...field} />
+                                            className="bg-zinc-300/50 dark:bg-zinc-700 dark:text-white border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0" placeholder="Enter channel description" {...field} />
                                         </FormControl>
                                         <FormMessage>{form.formState.errors.description?.message}</FormMessage>
                                     </FormItem>
@@ -151,10 +149,10 @@ export const CreateChannelModal = () => {
                                         >
                                             <FormControl>
                                                 <SelectTrigger
-                                                className="capitalize bg-zinc-300/50 dark:bg-zinc-200 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0" >
+                                                className="capitalize bg-zinc-300/50 dark:bg-zinc-700 dark:text-white border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0" >
                                                     <SelectValue 
                                                     placeholder = "Select a channel type" 
-                                                    className="capitalize"/>
+                                                    className="capitalize dark:bg-zinc-700 dark:text-white"/>
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>

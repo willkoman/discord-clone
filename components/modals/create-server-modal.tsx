@@ -10,6 +10,7 @@ import FileUpload from "@/components/file-upload";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useModal } from "@/hooks/use-modal-store";
+import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
     name: z.string().min(1, {message: "Server name is required"}).max(100,{message:  "Server name must be less than 100 characters"}),
@@ -56,20 +57,21 @@ export const CreateServerModal = () => {
                     <DialogTitle className="text-2xl text-center font-bold">
                         Customize your server
                     </DialogTitle>
-                    <DialogDescription className="text-center text-zinc-500">
+                    <DialogDescription className="text-center text-zinc-500 dark:text-zinc-300">
                         Give your server a personality with a name and an image. You can always change it later.
                     </DialogDescription>
                 </DialogHeader>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                         <div className="space-y-8 px-6">
-                            <div className="flex items-center justify-center text-center">
+                            <div className="flex items-center justify-center text-center  border-none">
                                 <FormField
                                     control={form.control}
                                     name="imageUrl"
                                     render = {({ field }) => (
-                                        <FormItem>
-                                            <FormControl>
+                                        <FormItem className={cn(
+                                            form.watch("imageUrl") ? "" : "border-none dark:bg-zinc-900 rounded-md")}>
+                                            <FormControl >
                                                 <FileUpload
                                                     endpoint="serverImage"
                                                     value={field.value}
@@ -89,7 +91,7 @@ export const CreateServerModal = () => {
                                         <FormLabel className = "uppercase text-xs font-bold text-zinc-500 dark:text-white">Server Name</FormLabel>
                                         <FormControl>
                                             <Input disabled={isLoading}
-                                            className="bg-zinc-300/50 dark:bg-zinc-200 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0" placeholder="Enter server name" {...field} />
+                                            className="bg-zinc-300/50 dark:bg-zinc-700 dark:text-white border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0" placeholder="Enter server name" {...field} />
                                         </FormControl>
                                         <FormMessage>{form.formState.errors.name?.message}</FormMessage>
                                     </FormItem>

@@ -10,13 +10,6 @@ import { Button } from "@/components/ui/button";
 import axios from "axios";
 import {  useRouter } from "next/navigation";
 import { useModal } from "@/hooks/use-modal-store";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue
-} from "@/components/ui/select";
 import { ChannelType } from "@prisma/client";
 import { use, useEffect } from "react";
 
@@ -108,7 +101,7 @@ export const EditChannelModal = () => {
                                         </FormLabel>
                                         <FormControl>
                                             <Input disabled={isLoading}
-                                            className="bg-zinc-300/50 dark:bg-zinc-200 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0" placeholder="Enter channel name" 
+                                            className="bg-zinc-300/50 dark:bg-zinc-700 dark:text-white border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0" placeholder="Enter channel name" 
                                             {...field}
                                             onChange={(e) => {
                                                 e.target.value = e.target.value.toLowerCase().replace(/\s+/g, '-').replace(/[!-\/:-@\[-`{-~]/g, '-'); ;
@@ -129,7 +122,7 @@ export const EditChannelModal = () => {
                                         </FormLabel>
                                         <FormControl>
                                             <Input disabled={isLoading}
-                                            className="bg-zinc-300/50 dark:bg-zinc-200 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0" placeholder="Enter channel description" {...field} />
+                                            className="bg-zinc-300/50 dark:bg-zinc-700 dark:text-white border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0" placeholder="Enter channel description" {...field} />
                                         </FormControl>
                                         <FormMessage>{form.formState.errors.description?.message}</FormMessage>
                                     </FormItem>
