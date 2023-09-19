@@ -39,6 +39,7 @@ interface ChatItemProps{
     isUpdated:boolean;
     socketUrl:string;
     socketQuery:Record<string,string>;
+    type: "channel" | "conversation",
 }
 
 const roleIconMap = {
@@ -64,6 +65,7 @@ export const ChatItem = (
         isUpdated,
         socketUrl,
         socketQuery,
+        type,
     }:ChatItemProps 
 ) => {
     const [isEditing, setIsEditing] = useState(false);
@@ -125,7 +127,10 @@ export const ChatItem = (
     const isAdmin = currentMember.role === MemberRole.ADMIN;
     const isModerator = currentMember.role === MemberRole.MODERATOR;
     const isOwner = currentMember.id === member.id;
-    const canDeleteMessage = !deleted && (isAdmin || isModerator || isOwner);
+    const canDeleteMessage = !deleted && (
+        (type === "channel" && (isAdmin || isModerator || isOwner)) || 
+        (type === "conversation" && isOwner)
+    );
     const canEditMessage = !deleted && isOwner && !fileUrl;
     const isPDF = fileType === "pdf" && fileUrl;
     const isImage = !isPDF && fileUrl;
@@ -245,7 +250,7 @@ export const ChatItem = (
                     </div>
                 </div>
             </div>
-            {canDeleteMessage && (
+            {canDeleteMessage &&  (
 
                 <div className = "hidden group-hover:flex items-center gap-x-2 absolute p-1 top-2 right-5 bg-white dark:bg-zinc-800 border rounded-sm">
                     {canEditMessage && (

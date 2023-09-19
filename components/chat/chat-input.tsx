@@ -5,7 +5,7 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import qs from "query-string";
-
+import {useRef,useEffect} from "react";
 import {
     Form,
     FormControl,
@@ -36,6 +36,7 @@ export const ChatInput = ({
     name,
     type
 }: ChatInputProps) => {
+    const inputRef = useRef<HTMLInputElement>(null);
     const {onOpen} = useModal();
     const router = useRouter();
     const form = useForm<z.infer<typeof formSchema>>({
@@ -49,6 +50,7 @@ export const ChatInput = ({
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
+            
             const url = qs.stringifyUrl({
                 url:apiUrl,
                 query,
@@ -57,16 +59,22 @@ export const ChatInput = ({
             form.reset();
             router.refresh();
 
+
         } catch (error) {
             console.log(error);
         }
         console.log(values);
     }
-
+    useEffect(() => {
+        if (!isLoading && inputRef.current) {
+            inputRef.current.focus();
+        }
+    }, [isLoading]);
     return(
         <Form {...form}> 
             <form onSubmit={form.handleSubmit(onSubmit)}>
                 <FormField
+                    disabled={isLoading}
                     control={form.control}
                     name="content"
                     render = {({field}) => (
@@ -82,10 +90,12 @@ export const ChatInput = ({
                                     </button>
                                     <Input
                                         disabled={isLoading}
+
                                         className="px-14 py-6 bg-zinc-200/90 dark:bg-zinc-700/75 border-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-zinc-600 dark:text-zinc-200"
                                         type="text"
                                         placeholder={`Message ${type === "conversation" ? name : "#" + name}`}
                                         {...field}
+                                        ref={inputRef}
                                     />
                                     <div className="absolute top-7 right-8">
                                         <EmojiPicker

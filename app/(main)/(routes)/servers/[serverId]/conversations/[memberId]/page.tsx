@@ -1,5 +1,7 @@
 import { ChatHeader } from "@/components/chat/chat-header";
 import { ChatInput } from "@/components/chat/chat-input";
+import { ChatMessages } from "@/components/chat/chat-messages";
+import { MediaRoom } from "@/components/media-room";
 import { getOrCreateConversation } from "@/lib/conversation";
 import { currentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
@@ -10,11 +12,15 @@ interface MemberIdPageProps {
     params: {
         serverId: string;
         memberId: string;
+    },
+    searchParams:{
+        video?:boolean;
     };
 }
 
 const MemberIdPage = async ({
-    params
+    params,
+    searchParams
 }:MemberIdPageProps) => {
     const profile = await currentProfile();
 
@@ -54,13 +60,35 @@ const MemberIdPage = async ({
             serverId={params.serverId}
             type="conversation"
         />
-        <div className="flex-1">Future Messages</div>
-        <ChatInput
-            name={otherMember.profile.name}
-            type="conversation"
-            query={{serverId: params.serverId, memberId: params.memberId}}
-            apiUrl={`/api/socket/messages`}
-        />
+        {!searchParams.video && (
+        <>
+            <ChatMessages
+                name={otherMember.profile.name}
+                member={currentMember}
+                chatId={conversation.id}
+                apiUrl={`/api/direct-messages`}
+                socketUrl={`/api/socket/direct-messages`}
+                socketQuery={{conversationId:conversation.id}}
+                paramKey="conversationId"
+                paramValue={conversation.id}
+                type="conversation"
+            />
+            <ChatInput
+                name={otherMember.profile.name}
+                type="conversation"
+                query={{conversationId:conversation.id}}
+                apiUrl={`/api/socket/direct-messages`}
+            />
+        </>
+        )}
+        {searchParams.video && (
+            <MediaRoom
+                chatId={conversation.id}
+                video={true}
+                audio={true}
+            />
+        )}
+
     </div> );
 }
 

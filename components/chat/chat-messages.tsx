@@ -4,12 +4,11 @@ import { Member, Message, Profile } from "@prisma/client";
 import { ChatWelcome } from "./chat-welcome";
 import { useChatQuery } from "@/hooks/use-chat-query";
 import { Loader2, ServerCrash } from "lucide-react";
-import { Fragment } from "react";
 import {format} from "date-fns";
-import Image from "next/image";
 import { ChatItem } from "./chat-item";
-import { useRef, useEffect } from 'react';
+import { useRef,Fragment,ElementRef} from 'react';
 import { useChatSocket } from "@/hooks/use-chat-socket";
+import { useChatScroll } from "@/hooks/use-chat-scroll";
 
 const DATE_FORMAT = "d MMM yyyy 'at' h:mm a";
 
@@ -45,8 +44,6 @@ export const ChatMessages = ({
     const queryKey = `chat:${chatId}`;
     const addKey = `chat:${chatId}:messages`;
     const updateKey = `chat:${chatId}:messages:update`;
-    const chatContainerRef = useRef<HTMLDivElement | null>(null);
-    const hasLoadedRef = useRef(false);
     const {
         data,
         fetchNextPage,
@@ -59,30 +56,18 @@ export const ChatMessages = ({
         paramKey,
         paramValue,
     });
-    useChatSocket({queryKey,addKey,updateKey});
+    const chatRef = useRef<ElementRef<"div">>(null);
+    const bottomRef = useRef<ElementRef<"div">>(null);
 
-    const isUserAtBottom = (): boolean => {
-        const container = chatContainerRef.current;
-        if (!container) return false;
-        return container.scrollHeight - container.scrollTop <= container.clientHeight * 1.2;
-    }
-    useEffect(() => {
-        if (isUserAtBottom()) {
-            const container = chatContainerRef.current;
-            if (container) {
-                container.scrollTop = container.scrollHeight;
-            }
-        }
-    }, [data]);
-    useEffect(() => {
-        const container = chatContainerRef.current;
-        if (hasLoadedRef.current) return;
-        if (container && data) {  // check if data has been loaded
-            container.scrollTop = container.scrollHeight;
-            hasLoadedRef.current = true;
-        }
-        // This dependency array ensures the effect runs whenever 'data' changes, but the internal check will prevent it from scrolling more than once.
-    }, [data]);
+    useChatSocket({queryKey,addKey,updateKey});
+    useChatScroll({
+        chatRef,
+        bottomRef,
+        loadMore:fetchNextPage,
+        shouldLoadMore:!isFetchingNextPage && !!hasNextPage,
+        count:data?.pages?.[0].items?.length ?? 0
+    });
+
 
     if(status === "loading") return (
         <div className="flex flex-col flex-1 justify-center items-center"> 
@@ -97,18 +82,33 @@ export const ChatMessages = ({
         </div>
     );
     return (
-        <div className="flex-1 flex flex-col py-4 overflow-y-auto" ref={chatContainerRef}>
-            <div className="flex-1" />
-            <ChatWelcome
+        <div className="flex-1 flex flex-col py-4 overflow-y-auto" ref={chatRef}>
+            {!hasNextPage && <div className="flex-1" />}
+            {!hasNextPage && (<ChatWelcome
                 type={type}
                 name={name}
-            />
+            />)}
+            {hasNextPage && (
+                <div className = "flex justify-center">
+                    {isFetchingNextPage ? (
+                        <Loader2 className="h-7 w-7 text-zinc-500 animate-spin my-4"/>
+                    ) : (
+                        <button
+                            className="text-zinc-500 text-xs dark:text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition my-4"
+                            onClick={() => fetchNextPage()}
+                        >
+                            Load more messages
+                        </button>
+                        )}
+                </div>
+            )}
             <div className=" flex flex-col-reverse mt-auto " >
                 {data?.pages.map((group, i) => (
                     <Fragment key={i}>
                         {group.items.map((message: MessageWithMemberWithProfile) => (
                             <ChatItem
                             currentMember={member}
+                            type={type}
                             member={message.member}
                             key={message.id}
                             id={message.id}
@@ -124,7 +124,7 @@ export const ChatMessages = ({
                     </Fragment>
                 ))}
             </div>
-
+        <div ref={bottomRef}/>
         </div>
     )
 }
